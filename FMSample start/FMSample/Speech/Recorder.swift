@@ -49,6 +49,12 @@ class Recorder {
         meetingItem.isComplete.wrappedValue = true
 
         try await transcriber.finishTranscribing()
+
+        if #available(iOS 26.0, macOS 26.0, *) {
+            Task {
+                meetingItem.title.wrappedValue = try await meetingItem.wrappedValue.suggestedTitle() ?? meetingItem.title.wrappedValue
+            }
+        }
     }
 
     func pauseRecording() {
